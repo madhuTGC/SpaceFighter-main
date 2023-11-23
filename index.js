@@ -928,52 +928,44 @@ window.addEventListener("keydown", (e) => {
 });
 
 // For mobile
+// For mobile
 document.addEventListener("touchstart", handleTouchStart, false);
 document.addEventListener("touchmove", handleTouchMove, false);
 
-var xDown = null;
-var yDown = null;
-
-function getTouches(evt) {
-  return evt.touches || // browser API
-    evt.originalEvent.touches; // jQuery
-}
+var touchStartX = 0;
+var touchStartY = 0;
 
 function handleTouchStart(evt) {
-  const firstTouch = getTouches(evt)[0];
-  xDown = firstTouch.clientX;
-  yDown = firstTouch.clientY;
+  touchStartX = evt.touches[0].clientX;
+  touchStartY = evt.touches[0].clientY;
 }
 
 function handleTouchMove(evt) {
-  if (!xDown || !yDown) {
+  if (!touchStartX || !touchStartY) {
     return;
   }
 
-  var xUp = evt.touches[0].clientX;
-  var yUp = evt.touches[0].clientY;
+  var touchEndX = evt.touches[0].clientX;
+  var touchEndY = evt.touches[0].clientY;
 
-  var xDiff = xDown - xUp;
-  var yDiff = yDown - yUp;
+  var xDiff = touchStartX - touchEndX;
+  var yDiff = touchStartY - touchEndY;
 
   if (Math.abs(xDiff) > Math.abs(yDiff)) {
-    /*most significant*/
     if (xDiff > 0) {
-      /* right swipe */
       moveLeft();
     } else {
-      /* left swipe */
       moveRight();
     }
   } else {
     if (yDiff > 0) {
-      /* down swipe */
-      createBullet();
+      // Swipe up, you can handle this if needed
     } else {
-      /* up swipe */
+      // Swipe down, you can handle this if needed
     }
   }
-  /* reset values */
-  xDown = null;
-  yDown = null;
+
+  // Reset values
+  touchStartX = 0;
+  touchStartY = 0;
 }
